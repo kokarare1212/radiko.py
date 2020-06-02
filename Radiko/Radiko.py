@@ -21,7 +21,7 @@ class Radiko():
 
    authToken = None
    region = None
-   version = "1.0.2"
+   version = "1.0.4"
 
    def __init__(self):
 
@@ -109,7 +109,7 @@ class Radiko():
       return station
 
    def getPrograms(self, station=None, d=datetime.datetime.now().strftime('%Y%m%d'), query=None):
-      if station re.search(r"\d{8}", d) is None:
+      if re.search(r"\d{8}", d) is None:
          raise RadikoException("Invalied aragments")
       program_response = requests.get(PROGRAM_BASE + d + "/" + self.region + ".xml")
       program_response.encoding = "UTF-8"
