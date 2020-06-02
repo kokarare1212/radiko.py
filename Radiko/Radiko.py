@@ -5,7 +5,7 @@
 ### This software is released under the Apache License 2.0 ###
 ### see http://www.apache.org/licenses/LICENSE-2.0         ###
 ##############################################################
-
+from .Exception import *
 import xml.etree.ElementTree as ET
 import base64, datetime, hashlib, math, os, random, subprocess, time, re, requests
 
@@ -21,7 +21,7 @@ class Radiko():
 
    authToken = None
    region = None
-   version = "1.0.4"
+   version = "1.0.5"
 
    def __init__(self):
 
