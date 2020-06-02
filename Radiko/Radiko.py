@@ -21,6 +21,7 @@ class Radiko():
 
    authToken = None
    region = None
+   version = "1.0.2"
 
    def __init__(self):
 
@@ -206,6 +207,5 @@ class Radiko():
    def getRegion(self):
       return self.region
 
-
-class RadikoException(Exception):
-   pass
+   def getVersion(self):
+      return self.version

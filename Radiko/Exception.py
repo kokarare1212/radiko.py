@@ -1,0 +1,2 @@
+class RadikoException(Exception):
+   pass
