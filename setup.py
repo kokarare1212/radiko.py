@@ -14,7 +14,7 @@ requires = ["requests"]
 
 setup(
     name="Radiko",
-    version="1.0.2",
+    version="1.0.3",
     description="Python製の非公式Radikoライブラリ",
     url="https://github.com/kokarare1212/Radiko/",
     author="kokarare1212",

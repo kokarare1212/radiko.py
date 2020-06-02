@@ -64,6 +64,8 @@ class Radiko():
    def getStationDetail(self, stationId):
       station_response = requests.get(STATION_BASE + self.region + ".xml")
       station_response.encoding = "UTF-8"
+      if station_response.status_code != requests.codes.ok:
+         raise RadikoException("Failed to get station detail")
       stationList = ET.fromstring(station_response.text)
       station = {}
       station["id"] = None
@@ -107,7 +109,7 @@ class Radiko():
       return station
 
    def getPrograms(self, station=None, d=datetime.datetime.now().strftime('%Y%m%d'), query=None):
-      if station is not None and re.search(r".{3}", station) is None or re.search(r"\d{8}", d) is None:
+      if station re.search(r"\d{8}", d) is None:
          raise RadikoException("Invalied aragments")
       program_response = requests.get(PROGRAM_BASE + d + "/" + self.region + ".xml")
       program_response.encoding = "UTF-8"
@@ -143,7 +145,7 @@ class Radiko():
       return list2
 
    def downloadProgram(self, station, start, end, path):
-      if os.path.isdir(os.path.dirname(path)) or re.search(r".{3}", station) is None or re.search(r"\d{14}", start) is None or re.search(r"\d{14}", end) is None:
+      if os.path.isdir(os.path.dirname(path)) or re.search(r"\d{14}", start) is None or re.search(r"\d{14}", end) is None:
          raise RadikoException("Invalied aragments")
       playlistm3u8_headers = {
          "X-Radiko-AuthToken": self.authToken
@@ -175,8 +177,6 @@ class Radiko():
          f.write(audio)
 
    def getLiveStationStreamUrls(self, station):
-      if re.search(r".{3}", station) is None:
-         raise RadikoException("Invalied aragment")
       a_exp = hashlib.md5(str(math.floor(random.random() * 1000000000) + math.floor(time.time())).encode()).hexdigest()
       stream_headers = {
          "X-Radiko-AuthToken": self.authToken
