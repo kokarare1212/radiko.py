@@ -21,7 +21,7 @@ class Radiko():
 
    authToken = None
    region = None
-   version = "1.0.5"
+   version = "1.0.6"
 
    def __init__(self):
 
@@ -145,7 +145,7 @@ class Radiko():
       return list2
 
    def downloadProgram(self, station, start, end, path):
-      if os.path.isdir(os.path.dirname(path)) or re.search(r"\d{14}", start) is None or re.search(r"\d{14}", end) is None:
+      if re.search(r"\d{14}", start) is None or re.search(r"\d{14}", end) is None:
          raise RadikoException("Invalied aragments")
       playlistm3u8_headers = {
          "X-Radiko-AuthToken": self.authToken
