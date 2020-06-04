@@ -6,30 +6,102 @@
 ### see http://www.apache.org/licenses/LICENSE-2.0         ###
 ##############################################################
 from .Exception import *
+from .Config import *
 import xml.etree.ElementTree as ET
 import base64, datetime, hashlib, math, os, random, subprocess, time, re, requests
-
-AUTH1_URL = "https://radiko.jp/v2/api/auth1"
-AUTH2_URL = "https://radiko.jp/v2/api/auth2"
-STATION_BASE = "https://radiko.jp/v3/station/list/"
-M3U8_BASE = "https://radiko.jp/v2/api/ts/playlist.m3u8"
-STREAM_BASE = "https://c-tf-rpaa.smartstream.ne.jp/tf/playlist.m3u8"
-PROGRAM_BASE = "https://radiko.jp/v3/program/date/"
-AUTHKEY = "bcd151073c03b352e1ef2fd66c32209da9ca0afa"
 
 class Radiko():
 
    authToken = None
    region = None
-   version = "1.0.6"
+   version = "1.1.0"
 
-   def __init__(self):
+   def __init__(self, regionId=None):
 
+      if regionId is None:
+         auth1_headers = {
+            "X-Radiko-App": "pc_html5",
+            "X-Radiko-App-Version": "0.0.1",
+            "X-Radiko-User": "dummy_user",
+            "X-Radiko-Device": "pc"
+         }
+      else:
+         info = self._getRandomInfo()
+         auth1_headers = {
+            "User-Agent": info["userAgent"],
+            "X-Radiko-App": "aSmartPhone7a",
+            "X-Radiko-App-Version": info["appVersion"],
+            "X-Radiko-User": info["userId"],
+            "X-Radiko-Device": info["device"]
+         }
+      auth1_response = requests.get(AUTH1_URL, headers=auth1_headers)
+      if auth1_response.status_code != requests.codes.ok:
+         raise RadikoException("Failed to authenticate auth1")
+      auth1_response.encoding = "UTF-8"
+      authToken = auth1_response.headers["X-Radiko-AuthToken"]
+      keyLenght = int(auth1_response.headers["X-Radiko-KeyLength"])
+      keyOffset = int(auth1_response.headers["X-Radiko-KeyOffset"])
+      if regionId is None:
+         partialKey = base64.b64encode(AUTHKEY[ keyOffset : keyOffset + keyLenght ].encode()).decode()
+         auth2_headers = {
+            "X-Radiko-AuthToken": authToken,
+            "X-Radiko-PartialKey": partialKey,
+            "X-Radiko-User": "dummy_user",
+            "X-Radiko-Device": "pc"
+         }
+      else:
+         partialKey = base64.b64encode(base64.b64decode(FULLKEY)[ keyOffset : keyOffset + keyLenght ])
+         auth2_headers = {
+            "User-Agent": info["userAgent"],
+            "X-Radiko-App": "aSmartPhone7a",
+            "X-Radiko-App-Version": info["appVersion"],
+            "X-Radiko-User": info["userId"],
+            "X-Radiko-Device": info["device"],
+            "X-Radiko-AuthToken": authToken,
+            "X-Radiko-PartialKey": partialKey,
+            "X-Radiko-Connection": "wifi",
+            "X-Radiko-Location": self._getLocation(regionId)
+         }
+      auth2_response = requests.get(AUTH2_URL, headers=auth2_headers)
+      if auth2_response.status_code != requests.codes.ok:
+         raise RadikoException("Failed to authenticate auth2")
+      auth2_response.encoding = "UTF-8"
+      self.authToken = authToken
+      self.region = auth2_response.text.split(",")[0]
+
+   def _getLocation(self, regionId):
+      lat = latlonList[regionId][0]
+      lon = latlonList[regionId][1]
+      lat = lat + random.random() / 40.0 * ( 1 if random.random() > 0.5 else -1)
+      lon = lon + random.random() / 40.0 * ( 1 if random.random() > 0.5 else -1)
+      return str(round(lat, 6)) + "," + str(round(lon, 6)) + ",gps"
+
+   def _getRandomInfo(self):
+      appVersion = random.choice(appVersionList)
+      userId = ""
+      for i in range(32):
+         userId = userId + random.choice(userIdBase)
+      ver = random.choice(list(versionMap.keys()))
+      sdk = versionMap[ver]["sdk"]
+      build = random.choice(versionMap[ver]["builds"])
+      model = random.choice(modelList)
+      device = sdk + "." + model
+      userAgent = "Dalvik/2.1.0 (Linux; U; Android " + ver + "; " + model + "/" + build + ")"
+      return {
+         "appVersion": appVersion,
+         "userId": userId,
+         "userAgent": userAgent,
+         "device": device
+      }
+
+   def changeRegion(self, regionId):
+      info = self._getRandomInfo()
       auth1_headers = {
-         "X-Radiko-App": "pc_html5",
-         "X-Radiko-App-Version": "0.0.1",
-         "X-Radiko-User": "dummy_user",
-         "X-Radiko-Device": "pc"
+         "User-Agent": info["userAgent"],
+         "X-Radiko-App": "aSmartPhone7a",
+         "X-Radiko-App-Version": info["appVersion"],
+         "X-Radiko-User": info["userId"],
+         "X-Radiko-Device": info["device"]
       }
       auth1_response = requests.get(AUTH1_URL, headers=auth1_headers)
       if auth1_response.status_code != requests.codes.ok:
@@ -38,12 +110,17 @@ class Radiko():
       authToken = auth1_response.headers["X-Radiko-AuthToken"]
       keyLenght = int(auth1_response.headers["X-Radiko-KeyLength"])
       keyOffset = int(auth1_response.headers["X-Radiko-KeyOffset"])
-      partialKey = base64.b64encode(AUTHKEY[ keyOffset : keyOffset + keyLenght ].encode()).decode()
+      partialKey = base64.b64encode(base64.b64decode(FULLKEY)[ keyOffset : keyOffset + keyLenght ])
       auth2_headers = {
+         "User-Agent": info["userAgent"],
+         "X-Radiko-App": "aSmartPhone7a",
+         "X-Radiko-App-Version": info["appVersion"],
+         "X-Radiko-User": info["userId"],
+         "X-Radiko-Device": info["device"],
          "X-Radiko-AuthToken": authToken,
          "X-Radiko-PartialKey": partialKey,
-         "X-Radiko-User": "dummy_user",
-         "X-Radiko-Device": "pc"
+         "X-Radiko-Connection": "wifi",
+         "X-Radiko-Location": self._getLocation(regionId)
       }
       auth2_response = requests.get(AUTH2_URL, headers=auth2_headers)
       if auth2_response.status_code != requests.codes.ok:
