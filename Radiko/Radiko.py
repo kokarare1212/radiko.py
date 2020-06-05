@@ -14,7 +14,7 @@ class Radiko():
 
    authToken = None
    region = None
-   version = "1.1.0"
+   version = "1.1.2"
 
    def __init__(self, regionId=None):
 
@@ -264,7 +264,7 @@ class Radiko():
          raise RadikoException("Failed to get playlist")
       m3u8_url = None
       for text in stream_response.text.split("\n"):
-         if text.startswith("https://"):
+         if text.startswith("https://") or text.startswith("http://"):
             m3u8_url = text
             break
       if m3u8_url is None:
@@ -274,7 +274,7 @@ class Radiko():
          raise RadikoException("Failed to get m3u8")
       streamUrls = []
       for text in m3u8_response.text.split("\n"):
-         if text.startswith("https://"):
+         if text.startswith("https://") or text.startswith("http://"):
             streamUrls.append(text)
       return streamUrls
 
