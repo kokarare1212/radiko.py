@@ -9,7 +9,7 @@
 from .Radiko import *
 
 __copyright__    = "Copyright © 2020 kokarare1212 All rights reserved."
-__version__      = "1.2.0"
+__version__      = "1.2.1"
 __license__      = "Apache License 2.0"
 __author__       = "kokarare1212"
 __author_email__ = "kokarare1212@gmail.com"

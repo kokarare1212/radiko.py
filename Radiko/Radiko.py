@@ -11,7 +11,7 @@ import base64, hashlib, math, random, requests, time
 
 class Radiko():
 
-  version = "1.2.0"
+  version = "1.2.1"
   _auth1Url = "https://radiko.jp/v2/api/auth1"
   _auth2Url = "https://radiko.jp/v2/api/auth2"
   _streamUrl = "https://radiko.jp/v3/station/stream/aSmartPhone7a/"
@@ -61,6 +61,12 @@ class Radiko():
 
   def getVersion(self):
     return self.version
+
+  def isStationAvailable(self, stationId):
+    return stationId in self._stationList
+
+  def getAvailableStations(self):
+    return self._stationList
 
   def _checkStation(self, stationId):
     return stationId in self._stationList
