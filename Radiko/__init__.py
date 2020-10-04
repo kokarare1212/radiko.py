@@ -5,7 +5,9 @@
 ### This software is released under the Apache License 2.0 ###
 ### see http://www.apache.org/licenses/LICENSE-2.0         ###
 ##############################################################
-"""Form a complex number.
+"""
+
+  Form a complex number.
 
   Keyword arguments:
   real -- the real part (default 0.0)
