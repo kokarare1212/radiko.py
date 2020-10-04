@@ -9,12 +9,12 @@
 from setuptools import setup
 
 
-requires = ["requests"]
+requires = ["defusedxml", "requests"]
 
 
 setup(
     name="Radiko",
-    version="1.3.0",
+    version="1.3.1",
     description="Python製の非公式Radikoライブラリ",
     url="https://github.com/kokarare1212/Radiko/",
     author="kokarare1212",
@@ -26,6 +26,11 @@ setup(
     ],
     install_requires=requires,
     classifiers=[
-        "Programming Language :: Python :: 3.8"
+        "Development Status :: 5 - Production/Stable",
+        "Environment :: Console",
+        "License :: OSI Approved :: Apache Software License",
+        "Natural Language :: Japanese",
+        "Programming Language :: Python :: 3.8",
+        "Topic :: Multimedia :: Sound/Audio :: Players"
     ],
 )
