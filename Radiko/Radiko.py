@@ -6,7 +6,7 @@
 ### see http://www.apache.org/licenses/LICENSE-2.0         ###
 ##############################################################
 
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 import base64, hashlib, math, random, requests, time
 
 class Radiko():
