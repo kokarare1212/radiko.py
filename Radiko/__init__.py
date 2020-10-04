@@ -6,10 +6,6 @@
 ### see http://www.apache.org/licenses/LICENSE-2.0         ###
 ##############################################################
 
-""" Radiko
-Python製の非公式Radikoライブラリ
-"""
-
 from .Radiko import Radiko, RadikoException
 
 __all__ = ["Radiko", "RadikoException"]
