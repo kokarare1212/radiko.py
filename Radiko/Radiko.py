@@ -11,7 +11,7 @@ import base64, requests
 
 class Radiko():
 
-  version = "1.2.2"
+  version = "1.3.0"
   _auth1Url = "https://radiko.jp/v2/api/auth1"
   _auth2Url = "https://radiko.jp/v2/api/auth2"
   _streamUrl = "https://radiko.jp/v3/station/stream/aSmartPhone7o/"
