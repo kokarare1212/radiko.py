@@ -7,7 +7,7 @@
 ##############################################################
 
 import defusedxml.ElementTree as ET
-import base64, hashlib, math, random, requests, time
+import base64, requests
 
 class Radiko():
 
@@ -34,7 +34,7 @@ class Radiko():
     if streamUrl is None:
       raise RadikoException("Failed to get stream url")
     return {
-      "url": streamUrl+"?station_id="+stationId+"&l=15&lsid="+hashlib.md5(str(math.floor(random.random() * 1000000000) + math.floor(time.time())).encode()).hexdigest()+"&type=b",
+      "url": streamUrl+"?station_id="+stationId+"&l=15&lsid=&type=b",
       "authtoken": self._getAuthToken(self._stationRegion[stationId])
     }
 
@@ -52,7 +52,7 @@ class Radiko():
     if streamUrl is None:
       raise RadikoException("Failed to get stream url")
     return {
-      "url": streamUrl+"?station_id="+stationId+"&start_at="+ft+"&ft="+ft+"&end_at="+to+"&to="+to+"&l=15&lsid="+hashlib.md5(str(math.floor(random.random() * 1000000000) + math.floor(time.time())).encode()).hexdigest()+"&type=b",
+      "url": streamUrl+"?station_id="+stationId+"&start_at="+ft+"&ft="+ft+"&end_at="+to+"&to="+to+"&l=15&lsid=&type=b",
       "authtoken": self._getAuthToken(self._stationRegion[stationId])
     }
 
