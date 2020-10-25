@@ -14,7 +14,7 @@ requires = ["defusedxml", "requests"]
 
 setup(
     name="Radiko",
-    version="1.3.1",
+    version="1.3.2",
     description="Python製の非公式Radikoライブラリ",
     url="https://github.com/kokarare1212/Radiko/",
     author="kokarare1212",
