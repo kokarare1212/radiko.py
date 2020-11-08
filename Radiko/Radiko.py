@@ -9,7 +9,7 @@
 import defusedxml.ElementTree as ET
 import base64, requests
 
-__version__ = "1.3.3"
+__version__ = "1.3.7"
 
 class Radiko():
 
