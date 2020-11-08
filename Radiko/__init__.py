@@ -6,6 +6,6 @@
 ### see http://www.apache.org/licenses/LICENSE-2.0         ###
 ##############################################################
 
-from .Radiko import Radiko, RadikoException
+from .Radiko import *
 
 __all__ = ["Radiko", "RadikoException"]

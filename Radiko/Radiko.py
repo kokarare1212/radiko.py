@@ -9,9 +9,11 @@
 import defusedxml.ElementTree as ET
 import base64, requests
 
+__version__ = "1.3.3"
+
 class Radiko():
 
-  version = "1.3.2"
+  version = __version__
   _auth1Url = "https://radiko.jp/v2/api/auth1"
   _auth2Url = "https://radiko.jp/v2/api/auth2"
   _streamUrl = "https://radiko.jp/v3/station/stream/aSmartPhone7o/"
@@ -85,7 +87,7 @@ class Radiko():
     x = ET.fromstring(r.text)
     for es in x.findall("stations"):
       for e in es.findall("station"):
-        if e.find("id") == stationId:
+        if e.find("id").text == stationId:
           return e.find("area_id").text
 
   def _getAuthToken(self, regionId):
@@ -115,3 +117,5 @@ class Radiko():
 
 class RadikoException(Exception):
   pass
+
+__all__ = ["Radiko", "RadikoException", "__version__"]
