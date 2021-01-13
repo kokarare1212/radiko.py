@@ -11,7 +11,7 @@ import re
 import defusedxml.ElementTree as ET
 import requests
 
-__version__ = "1.4.0"
+__version__ = "1.4.1"
 
 
 class RadikoClient:
@@ -30,6 +30,14 @@ class RadikoClient:
                     info[tag.tag] = tag.text
                 available_stations.append(info)
         return available_stations
+
+    def get_station(self, station_id: str) -> dict:
+        stations = self.get_stations()
+        station_data = {}
+        for station in stations:
+            if station["id"] == station_id:
+                station_data = station
+        return station_data
 
     def get_station_ids(self) -> list:
         stations = self.get_stations()
