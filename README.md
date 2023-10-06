@@ -2,4 +2,4 @@
 [![DeepSource](https://deepsource.io/gh/kokarare1212/Radiko.py.svg/?label=active+issues&show_trend=true)](https://deepsource.io/gh/kokarare1212/Radiko.py/?ref=repository-badge)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)  
 # radiko.py
-Python製の非公式radikoライブラリ
+radiko library made by Python
